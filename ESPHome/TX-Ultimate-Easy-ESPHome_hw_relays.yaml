@@ -434,17 +434,24 @@ script:
             return;
           }
 
-          // Ignore if other touch events are active
-          if (bs_multi_touch->state ||
-              bs_swipe_${ID_SWIPE_LEFT_OR_UP_TEXT}->state ||
-              bs_swipe_${ID_SWIPE_RIGHT_OR_DOWN_TEXT}->state) {
-            ESP_LOGV("${TAG_HW_RELAYS}", "Multi-touch: %s", YESNO(bs_multi_touch->state));
-            ESP_LOGV("${TAG_HW_RELAYS}", "Swipe ${ID_SWIPE_LEFT_OR_UP_TEXT}: %s",
-                                          YESNO(bs_swipe_${ID_SWIPE_LEFT_OR_UP_TEXT}->state));
-            ESP_LOGV("${TAG_HW_RELAYS}", "Swipe ${ID_SWIPE_RIGHT_OR_DOWN_TEXT}: %s",
-                                          YESNO(bs_swipe_${ID_SWIPE_RIGHT_OR_DOWN_TEXT}->state));
-            return;
-          }
+    ESP_LOGI("relay_debug",
+             "button=%u multi=%d left=%d right=%d",
+             button,
+             bs_multi_touch->state,
+             bs_swipe_${ID_SWIPE_LEFT_OR_UP_TEXT}->state,
+             bs_swipe_${ID_SWIPE_RIGHT_OR_DOWN_TEXT}->state);
+
+    // Ignore if other touch events are active
+    if (bs_multi_touch->state ||
+      bs_swipe_${ID_SWIPE_LEFT_OR_UP_TEXT}->state ||
+      bs_swipe_${ID_SWIPE_RIGHT_OR_DOWN_TEXT}->state) {
+
+  ESP_LOGW("relay_debug", "Relay blocked by gesture!");
+  return;
+}
+
+ESP_LOGI("relay_debug", "Gesture check passed");
+          
 
           // Toggle relay if corresponding button action is enabled
           // Note: If ESP-NOW package is included, it will extend this script and send ESP-NOW commands
