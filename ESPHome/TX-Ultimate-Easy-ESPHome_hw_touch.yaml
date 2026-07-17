@@ -180,9 +180,15 @@ binary_sensor:
     on_press:
       then:
         - delay: !lambda return nr_touch_duration->state;
+        
+        - logger.log:
+            level: INFO
+            format: ">>> bs_multi_touch OFF"
+            
         - binary_sensor.template.publish:
             id: bs_multi_touch
-            state: OFF  # yamllint disable-line rule:truthy
+            state: OFF  
+
 
   - id: bs_swipe_${ID_SWIPE_RIGHT_OR_DOWN_TEXT}
     name: Swipe-${ID_SWIPE_RIGHT_OR_DOWN_TEXT} event
