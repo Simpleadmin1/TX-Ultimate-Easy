@@ -310,6 +310,10 @@ script:
       # Extended by:
       #   - HW Buttons
       #   - HW Vibration
+      - logger.log:
+          level: INFO
+          format: ">>> bs_multi_touch ON"
+
       - binary_sensor.template.publish:
           id: bs_multi_touch
           state: ON  # yamllint disable-line rule:truthy
