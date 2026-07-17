@@ -176,6 +176,7 @@ binary_sensor:
     icon: mdi:gesture-two-tap
     internal: false
     disabled_by_default: true
+    trigger_on_initial_state: true
     platform: template
     on_press:
       then:
@@ -313,16 +314,13 @@ script:
   - id: touch_on_multi_touch_release
     mode: restart
     then:
-      # Extended by:
-      #   - HW Buttons
-      #   - HW Vibration
-      - logger.log:
-          level: INFO
-          format: ">>> bs_multi_touch ON"
-
-      - binary_sensor.template.publish:
-          id: bs_multi_touch
-          state: ON  # yamllint disable-line rule:truthy
+        - binary_sensor.template.publish:
+            id: bs_multi_touch
+            state: ON
+        - delay: !lambda return nr_touch_duration->state;
+        - binary_sensor.template.publish:
+            id: bs_multi_touch
+            state: OFF
 
   - id: touch_on_press
     mode: restart
